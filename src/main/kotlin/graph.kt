@@ -1,29 +1,19 @@
+import java.util.Random
+val random = Random()
+fun rand(from: Double, to: Double) : Double { return random.nextInt((to*1000).toInt()-(from*1000).toInt())/1000.0 + from }
+
+val graphSize: Double = 1000.0
+
 open class Node{
     public var neighbors: Set<Node> = emptySet()
     public var color = "ffffff"
-    public var x: Double = 0.0
-    public var y: Double = 0.0
+    public var x: Double = rand(-graphSize,graphSize)
+    public var y: Double = rand(-graphSize,graphSize)
     public var size: Double = 1.0
 
     public fun adjust(node: Node){
         neighbors += node
         node.neighbors += this
-    }
-}
-
-// it doesn't override Graph because Community.addNode takes a node,
-// which Graph.addNode doesn't. Graph doesn't override Community
-// because that would be nonsense
-
-class Comunity(){
-    public var nodes: Set<Node> = emptySet()
-
-    public fun addNode(node: Node){
-        nodes += node
-    }
-
-    public fun deleteNode(node: Node){
-        nodes -= node
     }
 }
 
@@ -44,11 +34,9 @@ open class Graph{
 
     public fun layoutGraph(){TODO()}
 
-    public fun findKeyNodes(){TODO()}
+    //public fun findKeyNodes(){TODO()}
 
-    public fun findCommunities(){TODO()}
+    public fun findCommunities(){
+        louvain(this)
+    }
 }
-
-// controller
-
-// view
