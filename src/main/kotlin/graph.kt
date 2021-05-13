@@ -15,7 +15,7 @@ class Node{
         return neighbours
     }
 
-    public fun sumOfWeights(): Double{
+    public fun sumOfWeights(): Double{ //k i
         var sum: Double = 0.0
         for (vertex in this.vertexes){
             sum+=vertex.weight
@@ -31,11 +31,17 @@ class Vertex(node1: Node, node2: Node, public var weight: Double){
 class Graph{
     public var nodes: MutableSet<Node> = mutableSetOf()
     public var vertexes: MutableSet<Vertex> = mutableSetOf()
+    public var sumOfWeights: Double = 0.0 // m
 
     public fun connect(node1: Node, node2: Node, weight: Double){
+        nodes.add(node1)
+        nodes.add(node2)
+
         val vertex = Vertex(node1,node2,weight)
         node1.vertexes.add(vertex)
         node2.vertexes.add(vertex)
+
         vertexes.add(vertex)
+        sumOfWeights += vertex.weight
     }
 }
