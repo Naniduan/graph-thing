@@ -1,4 +1,5 @@
 import javax.swing.MutableComboBoxModel
+import kotlin.math.pow
 
 class Community(node: Node){
     public var nodes: MutableSet<Node> = mutableSetOf(node)
@@ -56,19 +57,13 @@ fun sumOfWeights(vertexes: MutableSet<Vertex>): Double{
     return theSum
 }
 
-fun louvain(graph: Graph){
+class Louvain{
     var communities: MutableSet<Community> = mutableSetOf()
-    val communityOfTheNode: MutableMap<Node, Community> = mutableMapOf()
-
-    for (i in graph.nodes){
-        val community = Community(i)
-        communities.add(community)
-        communityOfTheNode[i] = community
-    }
+    var communityOfTheNode: MutableMap<Node, Community> = mutableMapOf()
 
     var modularity: Double = 0.0
 
-    fun changeInModularity(community: Community, node: Node): Double{
+    private fun changeInModularity(community: Community, node: Node, graph: Graph): Double{
         var firstPart = (community.sumOfAllWeights + 2*community.sumOfWeightsInCommunity(node))/(2*graph.sumOfWeights)
         firstPart -= ((community.sumOfEnteringVertexes + node.sumOfWeights())/(2*graph.sumOfWeights)).pow(2)
 
@@ -79,7 +74,13 @@ fun louvain(graph: Graph){
         return firstPart - secondPart
     }
 
-    fun firstPhase(){
+    fun firstPhase(graph: Graph){
+        for (i in graph.nodes){
+            val community = Community(i)
+            communities.add(community)
+            communityOfTheNode[i] = community
+        }
+
         var optimizeable: Boolean = true
         while(optimizeable) {
             optimizeable = false
@@ -88,8 +89,8 @@ fun louvain(graph: Graph){
                 var maxChangeInModularity: Double = -1.0
                 for (neighbour in node.neighbours()) {
                     val tryThisCommunity: Community = communityOfTheNode[neighbour]!!
-                    if (maxChangeInModularity < changeInModularity(tryThisCommunity, node)) {
-                        maxChangeInModularity = changeInModularity(tryThisCommunity, node)
+                    if (maxChangeInModularity < changeInModularity(tryThisCommunity, node, graph)) {
+                        maxChangeInModularity = changeInModularity(tryThisCommunity, node, graph)
                         optimalCommunity = tryThisCommunity
                     }
                 }
@@ -109,7 +110,53 @@ fun louvain(graph: Graph){
         }
     }
 
-    fun secondPhase(){
-        TODO()
+    fun secondPhase(graph: Graph){
+        val secondPhaseGraph = Graph()
+        val secondPhaseNodes: MutableMap<Community,Node> = mutableMapOf()
+        for (community in communities){
+            secondPhaseNodes[community] = Node()
+        }
+
+        for (vertex in graph.vertexes){
+            val ends: Array<Node> = Array(2,{i -> Node()})
+            var i = 0
+            for (node in vertex.nodes){
+                ends[i] = node
+                i+=1
+            }
+
+            if (secondPhaseNodes[communityOfTheNode[ends[0]]]!!.
+                vertexFromNode[secondPhaseNodes[communityOfTheNode[ends[1]]]] == null)
+                {
+                secondPhaseGraph.connect(secondPhaseNodes[communityOfTheNode[ends[0]]]!!,
+                    secondPhaseNodes[communityOfTheNode[ends[1]]]!!,vertex.weight)
+            }
+
+            else
+            {
+                secondPhaseNodes[communityOfTheNode[ends[0]]]!!.
+                    vertexFromNode[secondPhaseNodes[communityOfTheNode[ends[1]]]]!!.weight +=
+                    vertex.weight
+            } // the ?:run{} construction doesn't work
+        }
+
+        val firstPhaseCommunities = communities
+        val firstPhaseCommunityOfTheNode = communityOfTheNode
+
+        communities = mutableSetOf()
+        communityOfTheNode = mutableMapOf()
+
+        firstPhase(secondPhaseGraph)
+
+        // now reassign communities
+
+        for (node in graph.nodes){
+            communityOfTheNode[secondPhaseNodes[firstPhaseCommunityOfTheNode[node]]]!!.addNode(node)
+            communityOfTheNode[node] = communityOfTheNode[secondPhaseNodes[firstPhaseCommunityOfTheNode[node]]]!!
+        }
+
+        for (node in secondPhaseGraph.nodes){
+            communityOfTheNode[secondPhaseNodes[firstPhaseCommunityOfTheNode[node]]]!!.deleteNode(node)
+        }
     }
 }

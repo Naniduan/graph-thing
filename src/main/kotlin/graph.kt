@@ -1,8 +1,9 @@
-import tornadofx.*
+//import tornadofx.*
 import java.awt.Color
 
 class Node{
     public var vertexes: MutableSet<Vertex> = mutableSetOf()
+    public var vertexFromNode: MutableMap<Node,Vertex> = mutableMapOf()
 
     public var color = Color.WHITE
     public var x: Double = 0.0
@@ -43,6 +44,8 @@ class Graph{
         val vertex = Vertex(node1,node2,weight)
         node1.vertexes.add(vertex)
         node2.vertexes.add(vertex)
+        node1.vertexFromNode[node2] = vertex
+        node2.vertexFromNode[node1] = vertex
 
         vertexes.add(vertex)
         sumOfWeights += vertex.weight
