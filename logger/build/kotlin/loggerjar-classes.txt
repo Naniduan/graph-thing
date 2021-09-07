@@ -1,0 +1,1 @@
+C:\Users\Eegar\IdeaProjects\graph-thing\logger\build\classes\kotlin\main\logger\LoggerKt.class
