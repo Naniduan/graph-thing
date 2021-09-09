@@ -11,7 +11,8 @@ import tornadofx.find
 
 class GraphView(private val graph: Graph = Graph()): Pane() {
     private val dragger = find(VertexDragController::class)
-    private val vertices by lazy {
+    val vertexFromName = graph.verticesFromLabels
+    val vertices by lazy {
         graph.vertices.associateWith {
             VertexView(it, 0.0, 0.0, props.vertex.radius, Color.BLACK) }
     }
@@ -29,6 +30,9 @@ class GraphView(private val graph: Graph = Graph()): Pane() {
     fun edges(): Collection<EdgeView> = edges.values
 
     init {
+        edges().forEach {
+            add(it)
+        }
         vertices().forEach { v ->
             add(v)
             add(v.label)
@@ -37,9 +41,6 @@ class GraphView(private val graph: Graph = Graph()): Pane() {
             v.setOnMouseDragged { e -> e?.let { dragger.dragged(it) }}
             v.setOnMouseReleased { e -> e?.let { dragger.released(it) }}
             v.setOnMouseExited { e -> e?.let { dragger.exited(it) }}
-        }
-        edges().forEach {
-            add(it)
         }
     }
 }

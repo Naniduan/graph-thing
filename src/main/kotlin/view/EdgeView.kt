@@ -10,5 +10,4 @@ class EdgeView(val first: VertexView, val second: VertexView): Line() {
         endXProperty().bind(second.centerXProperty())
         endYProperty().bind(second.centerYProperty())
     }
-
 }

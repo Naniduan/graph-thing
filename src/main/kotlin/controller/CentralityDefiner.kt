@@ -3,13 +3,17 @@ package controller
 import javafx.scene.paint.Color
 import tornadofx.Controller
 import view.VertexView
+import java.lang.Math.min
 import kotlin.math.round
 
 class Centrality: Controller(), Representation {
     private fun color(vertex: VertexView, maxCentrality: Double, minCentrality: Double){
-        var difference: Int = 255- round(((vertex.vertex.centrality-minCentrality)/(maxCentrality-minCentrality)) *255).toInt()
+        val difference: Int = min(255- round(((vertex.vertex.centrality-minCentrality)/(maxCentrality-minCentrality)) *255).toInt(),255)
         //if the centrality is high, the node is red, otherwise, it is more white
-        var newColor = "#ff"+difference.toString(16)+difference.toString(16)
+        val newColor = "#ff"+
+                        (difference/16).toString(16)+(difference%16).toString(16)+
+                        (difference/16).toString(16)+(difference%16).toString(16)
+        //println(newColor)
         vertex.color = Color.web(newColor)
     }
 

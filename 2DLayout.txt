@@ -1,0 +1,15 @@
+13 14 DoubleProperty [value: 10.0]
+A BA CA DA EA FA GH IH JH KH LH MH NA HA 0.0 0.0 0xff0000ff
+B 0.0 0.0 0xffffffff
+C 0.0 0.0 0xffffffff
+D 0.0 0.0 0xffffffff
+E 0.0 0.0 0xffffffff
+F 0.0 0.0 0xffffffff
+G 0.0 0.0 0xffffffff
+H 0.0 0.0 0xff0000ff
+I 0.0 0.0 0xffffffff
+J 0.0 0.0 0xffffffff
+K 0.0 0.0 0xffffffff
+L 0.0 0.0 0xffffffff
+M 0.0 0.0 0xffffffff
+N 0.0 0.0 0xffffffff

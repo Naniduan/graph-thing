@@ -40,7 +40,7 @@ class Graph{
     public var edges: MutableSet<Edge> = mutableSetOf()
     public var sumOfWeights: Double = 0.0 // m
 
-    public fun connect(label1: String, label2: String, weight: Double){
+    public fun connect(label1: String, label2: String, weight: Double = 1.0){
         var vertex1: Vertex
         var vertex2: Vertex
 

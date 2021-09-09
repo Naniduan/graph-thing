@@ -5,6 +5,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import tornadofx.text
 import model.Vertex
+import tornadofx.toProperty
 
 class VertexView (val vertex: Vertex,
                   var x: Double, var y: Double,

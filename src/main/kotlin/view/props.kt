@@ -10,7 +10,7 @@ object props {
     }
 
     object vertex {
-        val radius = doubleProperty(10.0)
+        var radius = doubleProperty(1.0)
         val label = booleanProperty()
     }
 
